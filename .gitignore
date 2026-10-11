@@ -1,0 +1,14 @@
+target/
+.idea/
+*.iml
+.env
+!.env.example
+### IntelliJ IDEA ###
+*.iws
+out/
+*** Add File: C:\Users\siiva\OneDrive\Documentos\OpenConsigPlatform\.env.example
+POSTGRES_DB=openconsig
+POSTGRES_USER=openconsig
+POSTGRES_PASSWORD=openconsig_local
+POSTGRES_PORT=5432
+SERVER_PORT=8080
