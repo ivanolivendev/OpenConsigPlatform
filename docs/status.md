@@ -8,6 +8,7 @@
 | Simulação de crédito | Concluída | Endpoint REST e persistência em `platform.credit_simulations`. |
 | Swagger/OpenAPI | Concluído | Interface em `/swagger-ui.html`. |
 | Collections de teste | Concluídas | Postman e Insomnia no diretório raiz. |
+| Documentação técnica | Concluída | Arquitetura, ADRs, fluxos, segurança, fase 1 e troubleshooting. |
 | Autenticação | Adiada | Não faz parte da primeira entrega. |
 | Parceiros e multi-tenancy | Adiados | Módulo criado, regras de negócio ainda não implementadas. |
 | Propostas e contratos | Planejados | Evolução posterior do módulo `credit`. |

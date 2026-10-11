@@ -151,9 +151,15 @@ A [biblioteca de documentação](docs/README.md) é o ponto de entrada para arqu
 | Limites dos módulos | [Module boundaries](docs/architecture/module-boundaries.md) |
 | Decisões arquiteturais | [ADRs](docs/architecture/adr/README.md) |
 | Simulação de crédito | [Credit simulation](docs/product/credit-simulation.md) |
+| Fluxos de negócio | [Business flows](docs/product/business-flows.md) |
+| Visão do produto | [Executive vision](docs/product/executive-vision.md) |
 | Glossário | [Domain glossary](docs/product/domain-glossary.md) |
+| Segurança | [Security and multi-tenancy](docs/security/security-and-multitenancy.md) |
 | Setup local | [Development setup](docs/development/setup.md) |
 | Estratégia de testes | [Testing strategy](docs/development/testing-strategy.md) |
+| Escopo da fase 1 | [Phase 1 scope](docs/development/phase-1-scope.md) |
+| Troubleshooting | [Troubleshooting](docs/development/troubleshooting.md) |
+| Consistência e concorrência | [Consistency, events and concurrency](docs/architecture/consistency-events-concurrency.md) |
 | Roadmap | [Roadmap](docs/architecture/roadmap.md) |
 | Status | [Project status](docs/status.md) |
 

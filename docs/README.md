@@ -7,6 +7,7 @@ Esta pasta é a fonte de documentação técnica e funcional do OpenConsigPlatfo
 - **Novo desenvolvedor:** [setup e fluxo local](development/setup.md), [estratégia de testes](development/testing-strategy.md) e [Git Flow](development/git-flow.md).
 - **Arquitetura:** [visão geral](architecture/overview.md), [limites dos módulos](architecture/module-boundaries.md) e [ADRs](architecture/adr/README.md).
 - **Produto e domínio:** [simulação de crédito](product/credit-simulation.md) e [glossário](product/domain-glossary.md).
+- **Visão e fluxos:** [visão executiva](product/executive-vision.md) e [fluxos de negócio](product/business-flows.md).
 - **Planejamento:** [status atual](status.md) e [roadmap](architecture/roadmap.md).
 
 ## Mapa
@@ -15,6 +16,7 @@ Esta pasta é a fonte de documentação técnica e funcional do OpenConsigPlatfo
 architecture/    decisões, módulos e evolução técnica
 development/     setup, testes e workflow de contribuição
 product/         regras e linguagem do negócio
+security/        segurança e multi-tenancy
 status.md        implementado, próximo e adiado
 ```
 
