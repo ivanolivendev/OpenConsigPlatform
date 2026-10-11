@@ -1,0 +1,2 @@
+/** Inbound adapters for the Access module. */
+package com.openconsigplatform.access.interfaces;

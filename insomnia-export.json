@@ -1,0 +1,130 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-10-11T18:00:00.000Z",
+  "__export_source": "openconsigplatform.insomnia",
+  "resources": [
+    {
+      "_id": "wrk_openconsigplatform",
+      "parentId": null,
+      "modified": 1760205600000,
+      "created": 1760205600000,
+      "name": "OpenConsigPlatform",
+      "description": "Requests for the OpenConsigPlatform local Docker environment",
+      "scope": "collection",
+      "_type": "workspace"
+    },
+    {
+      "_id": "env_openconsigplatform_base",
+      "parentId": "wrk_openconsigplatform",
+      "modified": 1760205600000,
+      "created": 1760205600000,
+      "name": "Base Environment",
+      "data": {
+        "base_url": "http://localhost:8080"
+      },
+      "dataPropertyOrder": null,
+      "color": null,
+      "isPrivate": false,
+      "metaSortKey": 0,
+      "_type": "environment"
+    },
+    {
+      "_id": "fld_credit",
+      "parentId": "wrk_openconsigplatform",
+      "modified": 1760205600000,
+      "created": 1760205600000,
+      "name": "Credit",
+      "description": "Credit simulation endpoints",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_health",
+      "parentId": "wrk_openconsigplatform",
+      "modified": 1760205600000,
+      "created": 1760205600000,
+      "url": "{{ _.base_url }}/actuator/health",
+      "name": "Health Check",
+      "description": "Checks whether the application is running.",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -2000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_simulation_valid",
+      "parentId": "fld_credit",
+      "modified": 1760205600000,
+      "created": 1760205600000,
+      "url": "{{ _.base_url }}/api/v1/credit/simulations",
+      "name": "Create Credit Simulation",
+      "description": "Creates and persists an internal credit simulation.",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"cpf\": \"12345678900\",\n  \"monthlyIncome\": 5000.00,\n  \"requestedAmount\": 10000.00,\n  \"installments\": 24\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_simulation_invalid",
+      "parentId": "fld_credit",
+      "modified": 1760205600000,
+      "created": 1760205600000,
+      "url": "{{ _.base_url }}/api/v1/credit/simulations",
+      "name": "Create Invalid Simulation",
+      "description": "Example of validation failure: installments outside the allowed range.",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"cpf\": \"12345678900\",\n  \"monthlyIncome\": 5000.00,\n  \"requestedAmount\": 10000.00,\n  \"installments\": 120\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -900,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    }
+  ]
+}
