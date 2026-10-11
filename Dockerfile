@@ -3,7 +3,7 @@ FROM maven:3.9-eclipse-temurin-25 AS build
 WORKDIR /workspace
 COPY pom.xml .
 COPY src ./src
-RUN mvn -B clean test -Dtest=ArchitectureRulesTest
+RUN mvn -B clean test -Dtest=ArchitectureRulesTest,ModularityTest
 RUN mvn -B package -DskipTests
 
 FROM eclipse-temurin:25-jre
