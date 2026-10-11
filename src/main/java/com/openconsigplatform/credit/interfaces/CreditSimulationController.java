@@ -3,6 +3,7 @@ package com.openconsigplatform.credit.interfaces;
 import com.openconsigplatform.credit.application.SimulateCredit;
 import com.openconsigplatform.credit.domain.CreditSimulation;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -19,6 +20,7 @@ import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/api/v1/credit/simulations")
+@Tag(name = "Credit Simulation", description = "Simulações internas de crédito consignado")
 class CreditSimulationController {
 
     private final SimulateCredit simulateCredit;
@@ -40,7 +42,29 @@ class CreditSimulationController {
             @ApiResponse(
                     responseCode = "201",
                     description = "Simulação criada e persistida",
-                    content = @Content(schema = @Schema(implementation = CreditSimulationResponse.class))
+                    content = @Content(
+                            schema = @Schema(implementation = CreditSimulationResponse.class),
+                            examples = {
+                                    @ExampleObject(
+                                            name = "Available",
+                                            summary = "Parcela dentro do limite de renda",
+                                            value = "{\"simulationId\":\"63717ce1-ae2e-4323-8207-a78d251ee0fc\","
+                                                    + "\"cpf\":\"12345678900\",\"requestedAmount\":10000.00,"
+                                                    + "\"installments\":24,\"monthlyInterestRate\":1.79,"
+                                                    + "\"monthlyInstallment\":516.22,\"totalAmount\":12389.28,"
+                                                    + "\"status\":\"AVAILABLE\",\"createdAt\":\"2026-10-11T17:44:21Z\"}"
+                                    ),
+                                    @ExampleObject(
+                                            name = "Unavailable",
+                                            summary = "Parcela acima de 30% da renda",
+                                            value = "{\"simulationId\":\"63717ce1-ae2e-4323-8207-a78d251ee0fc\","
+                                                    + "\"cpf\":\"12345678900\",\"requestedAmount\":50000.00,"
+                                                    + "\"installments\":12,\"monthlyInterestRate\":1.79,"
+                                                    + "\"monthlyInstallment\":4720.00,\"totalAmount\":56640.00,"
+                                                    + "\"status\":\"UNAVAILABLE\",\"createdAt\":\"2026-10-11T17:44:21Z\"}"
+                                    )
+                            }
+                    )
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -48,7 +72,28 @@ class CreditSimulationController {
                             + "ou prazo fora do intervalo de 1 a 84 parcelas",
                     content = @Content(
                             mediaType = "text/plain",
-                            examples = @ExampleObject(value = "Installments must be between 1 and 84")
+                            examples = {
+                                    @ExampleObject(
+                                            name = "InvalidCpf",
+                                            summary = "CPF inválido",
+                                            value = "CPF must contain exactly 11 digits"
+                                    ),
+                                    @ExampleObject(
+                                            name = "InvalidIncome",
+                                            summary = "Renda inválida",
+                                            value = "Monthly income must be greater than zero"
+                                    ),
+                                    @ExampleObject(
+                                            name = "InvalidAmount",
+                                            summary = "Valor solicitado inválido",
+                                            value = "Requested amount must be greater than zero"
+                                    ),
+                                    @ExampleObject(
+                                            name = "InvalidInstallments",
+                                            summary = "Prazo inválido",
+                                            value = "Installments must be between 1 and 84"
+                                    )
+                            }
                     )
             )
     })
@@ -58,32 +103,12 @@ class CreditSimulationController {
                     description = "Dados de entrada da simulação",
                     content = @Content(
                             schema = @Schema(implementation = CreditSimulationRequest.class),
-                            examples = {
-                                    @ExampleObject(
-                                            name = "Available",
-                                            summary = "Simulação disponível",
-                                            value = "{\"cpf\":\"12345678900\",\"monthlyIncome\":5000.00,"
-                                                    + "\"requestedAmount\":10000.00,\"installments\":24}"
-                                    ),
-                                    @ExampleObject(
-                                            name = "Unavailable",
-                                            summary = "Parcela acima de 30% da renda",
-                                            value = "{\"cpf\":\"12345678900\",\"monthlyIncome\":2000.00,"
-                                                    + "\"requestedAmount\":50000.00,\"installments\":12}"
-                                    ),
-                                    @ExampleObject(
-                                            name = "InvalidCpf",
-                                            summary = "CPF inválido",
-                                            value = "{\"cpf\":\"1234567890\",\"monthlyIncome\":5000.00,"
-                                                    + "\"requestedAmount\":10000.00,\"installments\":24}"
-                                    ),
-                                    @ExampleObject(
-                                            name = "InvalidInstallments",
-                                            summary = "Prazo inválido",
-                                            value = "{\"cpf\":\"12345678900\",\"monthlyIncome\":5000.00,"
-                                                    + "\"requestedAmount\":10000.00,\"installments\":85}"
-                                    )
-                            }
+                            examples = @ExampleObject(
+                                    name = "Default simulation",
+                                    summary = "Exemplo de simulação",
+                                    value = "{\"cpf\":\"12345678900\",\"monthlyIncome\":5000.00,"
+                                            + "\"requestedAmount\":10000.00,\"installments\":24}"
+                            )
                     )
             )
             @org.springframework.web.bind.annotation.RequestBody CreditSimulationRequest request
