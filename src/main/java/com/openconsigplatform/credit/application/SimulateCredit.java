@@ -4,10 +4,8 @@ import com.openconsigplatform.credit.domain.CreditSimulation;
 import com.openconsigplatform.credit.domain.CreditSimulationService;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-
 @Service
-public class SimulateCredit {
+public class SimulateCredit implements SimulateCreditUseCase {
 
     private final CreditSimulationService simulationService;
     private final CreditSimulationRepository simulationRepository;
@@ -20,17 +18,13 @@ public class SimulateCredit {
         this.simulationRepository = simulationRepository;
     }
 
-    public CreditSimulation execute(
-            String cpf,
-            BigDecimal monthlyIncome,
-            BigDecimal requestedAmount,
-            int installments
-    ) {
+    @Override
+    public CreditSimulation execute(SimulateCreditCommand command) {
         CreditSimulation simulation = simulationService.simulate(
-                cpf,
-                monthlyIncome,
-                requestedAmount,
-                installments
+                command.cpf(),
+                command.monthlyIncome(),
+                command.requestedAmount(),
+                command.installments()
         );
 
         return simulationRepository.save(simulation);

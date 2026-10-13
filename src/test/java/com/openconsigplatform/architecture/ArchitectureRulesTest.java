@@ -45,6 +45,15 @@ class ArchitectureRulesTest {
     }
 
     @Test
+    void applicationMustNotDependOnInfrastructure() {
+        noClasses()
+                .that().resideInAnyPackage("..application..")
+                .should().dependOnClassesThat()
+                .resideInAnyPackage("..infrastructure..")
+                .check(applicationClasses);
+    }
+
+    @Test
     void modulesMustNotDependOnAnotherModuleInfrastructure() {
         noClasses()
                 .that().resideInAnyPackage("com.openconsigplatform.access..")

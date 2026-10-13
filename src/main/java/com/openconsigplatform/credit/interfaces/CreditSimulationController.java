@@ -1,6 +1,7 @@
 package com.openconsigplatform.credit.interfaces;
 
-import com.openconsigplatform.credit.application.SimulateCredit;
+import com.openconsigplatform.credit.application.SimulateCreditCommand;
+import com.openconsigplatform.credit.application.SimulateCreditUseCase;
 import com.openconsigplatform.credit.domain.CreditSimulation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -15,6 +16,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 import java.math.BigDecimal;
 
@@ -23,9 +31,9 @@ import java.math.BigDecimal;
 @Tag(name = "Credit Simulation", description = "Simulações internas de crédito consignado")
 class CreditSimulationController {
 
-    private final SimulateCredit simulateCredit;
+    private final SimulateCreditUseCase simulateCredit;
 
-    CreditSimulationController(SimulateCredit simulateCredit) {
+    CreditSimulationController(SimulateCreditUseCase simulateCredit) {
         this.simulateCredit = simulateCredit;
     }
 
@@ -71,7 +79,7 @@ class CreditSimulationController {
                     description = "Dados inválidos: CPF diferente de 11 dígitos, renda ou valor não positivos, "
                             + "ou prazo fora do intervalo de 1 a 84 parcelas",
                     content = @Content(
-                            mediaType = "text/plain",
+                            mediaType = "application/json",
                             examples = {
                                     @ExampleObject(
                                             name = "InvalidCpf",
@@ -111,27 +119,36 @@ class CreditSimulationController {
                             )
                     )
             )
-            @org.springframework.web.bind.annotation.RequestBody CreditSimulationRequest request
+            @Valid @org.springframework.web.bind.annotation.RequestBody CreditSimulationRequest request
     ) {
-        CreditSimulation simulation = simulateCredit.execute(
+        CreditSimulation simulation = simulateCredit.execute(new SimulateCreditCommand(
                 request.cpf(),
                 request.monthlyIncome(),
                 request.requestedAmount(),
-                request.installments()
-        );
+                request.installments() == null ? 0 : request.installments()
+        ));
 
         return CreditSimulationResponse.from(simulation);
     }
 
     record CreditSimulationRequest(
+            @NotBlank(message = "CPF is required")
+            @Pattern(regexp = "\\d{11}", message = "CPF must contain exactly 11 digits")
             @Schema(description = "CPF com exatamente 11 dígitos", example = "12345678900")
             String cpf,
+            @NotNull(message = "Monthly income is required")
+            @DecimalMin(value = "0.01", message = "Monthly income must be greater than zero")
             @Schema(description = "Renda mensal do cliente, maior que zero", example = "5000.00")
             BigDecimal monthlyIncome,
+            @NotNull(message = "Requested amount is required")
+            @DecimalMin(value = "0.01", message = "Requested amount must be greater than zero")
             @Schema(description = "Valor solicitado, maior que zero", example = "10000.00")
             BigDecimal requestedAmount,
+            @NotNull(message = "Installments are required")
+            @Min(value = 1, message = "Installments must be between 1 and 84")
+            @Max(value = 84, message = "Installments must be between 1 and 84")
             @Schema(description = "Quantidade de parcelas entre 1 e 84", example = "24", minimum = "1", maximum = "84")
-            int installments
+            Integer installments
     ) {
     }
 
@@ -159,7 +176,7 @@ class CreditSimulationController {
         static CreditSimulationResponse from(CreditSimulation simulation) {
             return new CreditSimulationResponse(
                     simulation.id(),
-                    simulation.cpf(),
+                    simulation.cpf().value(),
                     simulation.requestedAmount(),
                     simulation.installments(),
                     simulation.monthlyInterestRate(),

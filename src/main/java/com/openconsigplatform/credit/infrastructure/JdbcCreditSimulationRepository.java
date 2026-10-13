@@ -2,6 +2,7 @@ package com.openconsigplatform.credit.infrastructure;
 
 import com.openconsigplatform.credit.application.CreditSimulationRepository;
 import com.openconsigplatform.credit.domain.CreditSimulation;
+import com.openconsigplatform.credit.domain.Cpf;
 import com.openconsigplatform.credit.domain.SimulationStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -29,7 +30,7 @@ class JdbcCreditSimulationRepository implements CreditSimulationRepository {
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 simulation.id(),
-                simulation.cpf(),
+                simulation.cpf().value(),
                 simulation.monthlyIncome(),
                 simulation.requestedAmount(),
                 simulation.installments(),
@@ -53,7 +54,7 @@ class JdbcCreditSimulationRepository implements CreditSimulationRepository {
                 WHERE id = ?
                 """, (resultSet, rowNum) -> new CreditSimulation(
                 resultSet.getObject("id", UUID.class),
-                resultSet.getString("cpf"),
+                new Cpf(resultSet.getString("cpf")),
                 resultSet.getBigDecimal("monthly_income"),
                 resultSet.getBigDecimal("requested_amount"),
                 resultSet.getInt("installments"),
